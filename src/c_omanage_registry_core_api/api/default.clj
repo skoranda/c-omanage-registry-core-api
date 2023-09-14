@@ -25,7 +25,7 @@
 (defn-spec add-co-person-with-http-info any?
   "Create a CO Person
   Create a CO Person and related models/objects"
-  [coid int?, co-person-message co-person-message]
+  [coid int?, co-person-message co-person-message-spec]
   (check-required-params coid co-person-message)
   (call-api "/api/co/{coid}/core/v1/people" :post
             {:path-params   {"coid" coid }
@@ -40,7 +40,7 @@
 (defn-spec add-co-person (s/coll-of identifier-spec)
   "Create a CO Person
   Create a CO Person and related models/objects"
-  [coid int?, co-person-message co-person-message]
+  [coid int?, co-person-message co-person-message-spec]
   (let [res (:data (add-co-person-with-http-info coid co-person-message))]
     (if (:decode-models *api-context*)
        (st/decode (s/coll-of identifier-spec) res st/string-transformer)
@@ -110,7 +110,7 @@ control the order and number of returned objects."
 (defn-spec update-co-person-with-http-info any?
   "Update a CO Person
   Update a CO Person and related models/objects"
-  [coid int?, identifier string?, co-person-message co-person-message]
+  [coid int?, identifier string?, co-person-message co-person-message-spec]
   (check-required-params coid identifier co-person-message)
   (call-api "/api/co/{coid}/core/v1/people" :put
             {:path-params   {"coid" coid }
@@ -125,7 +125,7 @@ control the order and number of returned objects."
 (defn-spec update-co-person any?
   "Update a CO Person
   Update a CO Person and related models/objects"
-  [coid int?, identifier string?, co-person-message co-person-message]
+  [coid int?, identifier string?, co-person-message co-person-message-spec]
   (let [res (:data (update-co-person-with-http-info coid identifier co-person-message))]
     (if (:decode-models *api-context*)
        (st/decode any? res st/string-transformer)
